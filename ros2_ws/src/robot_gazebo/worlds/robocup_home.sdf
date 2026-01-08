@@ -804,7 +804,7 @@
 
     <!-- Demo pickup blocks for LanderPi arm -->
     <model name='demo_block_red'>
-      <pose>0.15 0.10 0.025 0 0 0</pose>
+      <pose>0.35 0.10 0.025 0 0 0</pose>
       <static>false</static>
       <link name='body'>
         <inertial>
@@ -850,7 +850,7 @@
     </model>
 
     <model name='demo_block_green'>
-      <pose>0.15 -0.10 0.025 0 0 0</pose>
+      <pose>0.35 0.0 0.025 0 0 0</pose>
       <static>false</static>
       <link name='body'>
         <inertial>
