@@ -2,7 +2,7 @@
 set -e
 
 echo "============================================================"
-echo "  ROS 2 Humble + Gazebo Fortress + LanderPi Install Script"
+echo "  ROS2 Humble + Gazebo Fortress + LanderPi Install Script"
 echo "============================================================"
 
 # Paths
@@ -113,7 +113,7 @@ fi
 # 4. Build workspace
 # ----------------------------------------------------------------------
 echo "[4/6] Building workspace with colcon..."
-echo "[4/6] Sourcing ROS 2 Humble..."
+echo "[4/6] Sourcing ROS2 Humble..."
 source /opt/ros/humble/setup.bash
 cd "$DEST_WS"
 
