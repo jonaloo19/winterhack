@@ -1,6 +1,6 @@
 # WinterHack
 
-WinterHack Challenge is an annual robotics-focused, challenge-based learning event hosted at Queen Mary University of London (QMUL). The 2026 challenge tasks participating teams with developing a fully autonomous mobile robot (AMR) to explore an unknown maze, detect coloured objects, retrieve them using a robotic arm, and return them safely to the start location.
+WinterHack Challenge is an annual, robotics-focused, challenge-based learning event hosted at Queen Mary University of London (QMUL). The 2026 theme, "Operation Rescue: Search, Locate and Retrieve", tasks teams with building a fully autonomous mobile robot (AMR) that explores an unknown maze, detects coloured objects, retrieves them with a robotic arm, and returns safely to the start location.
 
 This repository provides the official WinterHack ROS2 workspace, serving as the shared technical foundation for simulation, real-robot development, and the final on-site challenge. It is a WinterHack-specific, streamlined version, significantly reduced from the generic development repository: https://github.com/jonaloo19/ros2_humble_landerpi
 
