@@ -1,8 +1,10 @@
 # WinterHack
 
-WinterHack Challenge is an annual robotics-focused, challenge-based learning event hosted at Queen Mary University of London. The 2026 challenge tasks participating teams with developing a fully autonomous mobile robot (AMR) to explore an unknown maze, detect coloured objects, retrieve them using a robotic arm, and return them safely to the start location.
+WinterHack Challenge is an annual robotics-focused, challenge-based learning event hosted at Queen Mary University of London (QMUL). The 2026 challenge tasks participating teams with developing a fully autonomous mobile robot (AMR) to explore an unknown maze, detect coloured objects, retrieve them using a robotic arm, and return them safely to the start location.
 
 This repository provides the official WinterHack ROS2 workspace, serving as the shared technical foundation for simulation, real-robot development, and the final on-site challenge. It is a WinterHack-specific, streamlined version, significantly reduced from the generic development repository: https://github.com/jonaloo19/ros2_humble_landerpi
+
+ ![WinterHack's robot](media/Image1.jpg)
 
 ## Ubuntu GPU guides
 This section provides setup guides for Ubuntu (22.04) GPU configurations in dual-boot and WSL2 environments to ensure Gazebo and ROS2 run with hardware acceleration.
