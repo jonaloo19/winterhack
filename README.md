@@ -57,7 +57,7 @@ colcon build --symlink-install
 ros2 launch robot_gazebo worlds.launch.py world_name:=robocup_home
 ```
 
-Demo video (robocup_home locate/pick/drop): `media/video1.mp4`
+Demo video (robocup_home locate/pick/drop): [media/video1.mp4](media/video1.mp4)
 
 ![robocup_home demo](media/video1.gif)
 
@@ -68,7 +68,7 @@ ros2 launch robot_gazebo worlds.launch.py world_name:=winterhack_maze
 ```
 
 
-Demo video (winterhack_maze): `media/video2.mp4`
+Demo video (winterhack_maze): [media/video2.mp4](media/video2.mp4)
 
 ![winterhack_maze demo](media/video2.gif)
 
