@@ -51,7 +51,7 @@ colcon build --symlink-install
 
 ### Launch Gazebo world
 
-1. This launches the `robocup_home` world to demonstrate the WinterHack base/arm manipulation workflow (locate, pick, drop).
+1. This launches the `robocup_home` world to exercise the WinterHack base/arm manipulation workflow (locate, pick, drop).
 
 ```bash
 ros2 launch robot_gazebo worlds.launch.py world_name:=robocup_home
@@ -61,7 +61,7 @@ Demo video (robocup_home locate/pick/drop): `media/video1.mp4`
 
 ![robocup_home demo](media/video1.gif)
 
-2. This launches the `winterhack_maze` world to demonstrate the full WinterHack AMR stack: navigation, base/arm manipulation, and the mission runner driving the search → locate → pick → retrieve → drop workflow
+2. This launches the `winterhack_maze` world to exercise the full WinterHack AMR stack: navigation, base/arm manipulation, and the mission runner driving the search → locate → pick → retrieve → drop workflow
 
 ```bash
 ros2 launch robot_gazebo worlds.launch.py world_name:=winterhack_maze
