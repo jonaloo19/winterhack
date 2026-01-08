@@ -20,7 +20,7 @@ git clone https://github.com/jonaloo19/winterhack.git
 cd winterhack
 ```
 
-2) Install ROS 2 Humble (skips if already present):
+2) Install ROS2 Humble (skips if already present):
 ```bash
 chmod +x install_ros2_humble.sh
 ./install_ros2_humble.sh
@@ -31,7 +31,7 @@ chmod +x install_ros2_humble.sh
 chmod +x install_gazebo_landerpi.sh
 ./install_gazebo_landerpi.sh
 ```
-This script installs the ROS 2 + Gazebo tooling needed for simulation and navigation, copies the provided workspace into `~/ros2_ws`, builds it, and updates `~/.bashrc` with the workspace and Gazebo resource paths (plus a CPU-render fallback you can disable for GPU rendering).
+This script installs the ROS2 + Gazebo tooling needed for simulation and navigation, copies the provided workspace into `~/ros2_ws`, builds it, and updates `~/.bashrc` with the workspace and Gazebo resource paths (plus a CPU-render fallback you can disable for GPU rendering).
  
 After running, open a new terminal (or `source ~/.bashrc`) to load the environment.
 
