@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="rosmentor" xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:property name="machine"      value="$(env MACHINE_TYPE)"/>
+    <xacro:if value="${machine == 'LanderPi_Mecanum'}">
+        <xacro:include filename="$(find landerpi_description)/urdf/mecanum.xacro"/>
+    </xacro:if>
+    <xacro:if value="${machine == 'LanderPi_Acker'}">
+        <xacro:include filename="$(find landerpi_description)/urdf/ack.xacro"/>
+    </xacro:if>
+    <xacro:if value="${machine ==  'LanderPi_Tank'}">
+        <xacro:include filename="$(find landerpi_description)/urdf/tank.xacro"/>
+    </xacro:if>
+    <xacro:include filename="$(find landerpi_description)/urdf/inertial_matrix.xacro" />
+
+
+    <xacro:include filename="$(find landerpi_description)/urdf/arm.urdf.xacro"/>
+    <xacro:include filename="$(find landerpi_description)/urdf/gripper.urdf.xacro"/>
+</robot>

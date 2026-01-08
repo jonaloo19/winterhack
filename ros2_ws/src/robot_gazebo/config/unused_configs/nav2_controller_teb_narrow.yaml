@@ -1,0 +1,131 @@
+controller_server:
+  ros__parameters:
+    odom_topic: /odom
+    use_sim_time: True
+    controller_frequency: 10.0
+    
+    # 降低速度阈值，让机器人更容易被认为是"在移动"
+    min_x_velocity_threshold: 0.001
+    min_theta_velocity_threshold: 0.001
+    failure_tolerance: 0.5  # 增加容错
+
+    # Progress checker - 放宽限制
+    progress_checker_plugin: "progress_checker"
+    progress_checker:
+      plugin: "nav2_controller::SimpleProgressChecker"
+      required_movement_radius: 0.3  # 减小，更容易判定为有进展
+      movement_time_allowance: 15.0   # 增加时间容忍
+
+    # Goal checker - 放宽目标容差
+    goal_checker_plugins: ["goal_checker"] 
+    goal_checker:
+      stateful: True
+      plugin: "nav2_controller::SimpleGoalChecker"
+      xy_goal_tolerance: 0.15   # 稍微放宽
+      yaw_goal_tolerance: 0.2
+
+    controller_plugin_types: ["teb_local_planner::TebLocalPlannerROS"]
+    controller_plugins: ["FollowPath"]
+    FollowPath:
+      plugin: teb_local_planner::TebLocalPlannerROS
+
+      # === 时间离散化 ===
+      teb_autosize: 1.0
+      dt_ref: 0.4           # 减小，更精细的轨迹
+      dt_hysteresis: 0.1
+      max_samples: 500
+      global_plan_overwrite_orientation: True
+      allow_init_with_backwards_motion: True  # 允许倒车！窄通道很重要
+      max_global_plan_lookahead_dist: 2.0     # 减小前瞻距离
+      global_plan_viapoint_sep: 0.2           # 减小via point间距
+      global_plan_prune_distance: 0.8
+      exact_arc_length: False
+      feasibility_check_no_poses: 3           # 减少检查点数，更宽松
+      publish_feedback: False
+          
+      # === 机器人运动学 - 关键！===
+      max_vel_x: 0.3          # 降低最大速度
+      max_vel_x_backwards: 0.2  # 倒车速度
+      max_vel_theta: 1.5      # 降低转向速度
+      acc_lim_x: 2.0
+      acc_lim_theta: 2.5
+
+      # === Footprint - 必须与实际机器人匹配！===
+      footprint_model:
+        type: "circular"
+        radius: 0.20          # 改为与costmap的robot_radius一致！
+
+      # GoalTolerance
+      free_goal_vel: False
+          
+      # === 障碍物 - 窄通道核心参数！===
+      min_obstacle_dist: 0.05       # 大幅减小！原来0.25太大
+      inflation_dist: 0.05          # 减小膨胀
+      include_costmap_obstacles: True
+      costmap_obstacles_behind_robot_dist: 0.8
+      obstacle_poses_affected: 10
+
+      dynamic_obstacle_inflation_dist: 0.3
+      include_dynamic_obstacles: True 
+
+      costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSMCCH"
+      costmap_converter_spin_thread: True
+      costmap_converter_rate: 5
+
+      # === 优化参数 ===
+      no_inner_iterations: 5
+      no_outer_iterations: 4
+      optimization_activate: True
+      optimization_verbose: False
+      penalty_epsilon: 0.1
+      obstacle_cost_exponent: 2.0     # 减小，让规划器更敢靠近障碍物
+      weight_max_vel_x: 1.0
+      weight_max_vel_theta: 1.0
+      weight_acc_lim_x: 1.0
+      weight_acc_lim_theta: 1.0
+      weight_kinematics_nh: 1000.0
+      weight_kinematics_forward_drive: 1.0
+      weight_kinematics_turning_radius: 1.0
+      weight_optimaltime: 1.0
+      weight_shortest_path: 0.0
+      weight_obstacle: 50.0           # 减小障碍物权重
+      weight_inflation: 0.1
+      weight_dynamic_obstacle: 10.0
+      weight_dynamic_obstacle_inflation: 0.1
+      weight_viapoint: 50.0
+      weight_adapt_factor: 2.0
+
+      # === Homotopy Class Planner ===
+      enable_homotopy_class_planning: True
+      enable_multithreading: True
+      max_number_classes: 4
+      selection_cost_hysteresis: 5.0
+      selection_prefer_initial_plan: 1.0
+      selection_obst_cost_scale: 1.0
+      selection_alternative_time_cost: True
+
+      roadmap_graph_no_samples: 15
+      roadmap_graph_area_width: 5.0
+      roadmap_graph_area_length_scale: 1.0
+      h_signature_prescaler: 0.5
+      h_signature_threshold: 0.1
+      obstacle_heading_threshold: 0.45
+      switching_blocking_period: 0.0
+      viapoints_all_candidates: True
+      delete_detours_backwards: True
+      max_ratio_detours_duration_best_duration: 3.0
+      visualize_hc_graph: False
+      visualize_with_time_as_z_axis_scale: 0.0
+
+      # === Recovery - 增强恢复能力 ===
+      shrink_horizon_backup: True
+      shrink_horizon_min_duration: 5.0   # 减小
+      oscillation_recovery: True
+      oscillation_v_eps: 0.1
+      oscillation_omega_eps: 0.1
+      oscillation_recovery_min_duration: 5.0
+      oscillation_filter_duration: 5.0
+
+controller_server_rclcpp_node:
+  ros__parameters:
+    use_sim_time: True

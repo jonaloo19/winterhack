@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:arg name="sim_ign" default="true"/>
+
+    <!-- robot_description -->
+    <xacro:include filename="$(find landerpi_description)/urdf/landerpi.xacro"/>
+    <xacro:if value="$(arg sim_ign)">
+        <xacro:include filename="$(find robot_gazebo)/urdf/wheel_base.urdf.xacro"/>
+    </xacro:if>
+    <!-- ign_joint_control -->
+    <xacro:include filename="$(find robot_gazebo)/urdf/jetrover.gazebo.xacro"/>
+    <!-- lidar -->
+    <xacro:include filename="$(find robot_gazebo)/urdf/lidar.gazebo.xacro"/>
+    <!-- camera -->
+    <xacro:include filename="$(find robot_gazebo)/urdf/camera.gazebo.xacro"/>
+
+    <gazebo>
+        <!-- Joint state publisher -->
+        <plugin filename="$(find ign_ros2_control)/../../lib/libign_ros2_control-system.so" 
+                name="ign_ros2_control::IgnitionROS2ControlPlugin">
+          <parameters>$(find robot_gazebo)/config/robot_config.yaml</parameters>
+        </plugin>
+
+        <!-- joint -->
+        <plugin filename="libignition-gazebo-joint-state-publisher-system.so" name="ignition::gazebo::systems::JointStatePublisher">
+            <topic>joint_states</topic>
+        </plugin>
+
+        <!-- sensor-liar -->
+        <plugin filename="ignition-gazebo-sensors-system" name="ignition::gazebo::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+        </plugin>
+
+        <!-- imu -->
+        <plugin filename="ignition-gazebo-imu-system" name="ignition::gazebo::systems::Imu"></plugin>
+
+        <!-- odom -->
+        <plugin
+            filename="ignition-gazebo-odometry-publisher-system"
+            name="ignition::gazebo::systems::OdometryPublisher">
+            <odom_publish_frequency>50</odom_publish_frequency>
+            <odom_topic>/odom</odom_topic>
+            <odom_frame>odom</odom_frame>
+            <robot_base_frame>base_footprint</robot_base_frame>
+            <tf_topic>/odom/tf</tf_topic>
+        </plugin>
+
+        <!-- Holonomic plugin -->
+        <xacro:if value="$(arg sim_ign)">
+            <plugin filename="libHolonomicPlugin.so" name="holonomic_sim::HolonomicPlugin">
+                <wheel_joint>wheel_joint</wheel_joint>
+                <top_base_joint>top_wheel_base_joint</top_base_joint>
+                <bottom_base_joint>bottom_wheel_base_joint</bottom_base_joint>
+            </plugin>
+        </xacro:if>
+    </gazebo>
+    
+    <!-- Gripper friction for better grasping -->
+    <gazebo reference="left_jaw_link">
+        <mu1>1.5</mu1>
+        <mu2>1.5</mu2>
+        <kp>1000000.0</kp>
+        <kd>100.0</kd>
+        <minDepth>0.001</minDepth>
+        <maxContacts>4</maxContacts>
+    </gazebo>
+    
+    <gazebo reference="right_jaw_link">
+        <mu1>1.5</mu1>
+        <mu2>1.5</mu2>
+        <kp>1000000.0</kp>
+        <kd>100.0</kd>
+        <minDepth>0.001</minDepth>
+        <maxContacts>4</maxContacts>
+    </gazebo>
+
+</robot>

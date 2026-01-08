@@ -1,0 +1,7 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: winterhack
+    relative_path: config/rosmentor.urdf.xacro
+    xacro_args: ""
+  srdf:
+    relative_path: config/rosmentor.srdf

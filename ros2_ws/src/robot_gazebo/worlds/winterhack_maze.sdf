@@ -1,0 +1,521 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="robot_world">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <plugin
+      filename="ignition-gazebo-physics-system"
+      name="gz::sim::systems::Physics">
+      <engine>
+        <filename>ignition-physics-dartsim-plugin</filename>
+      </engine>
+      <solver>
+        <iterations>50</iterations>
+      </solver>
+    </plugin>
+    <plugin
+      filename="ignition-gazebo-user-commands-system"
+      name="gz::sim::systems::UserCommands">
+    </plugin>
+    <plugin
+      filename="ignition-gazebo-scene-broadcaster-system"
+      name="gz::sim::systems::SceneBroadcaster">
+    </plugin>
+    <plugin
+      filename="ignition-gazebo-contact-system"
+      name="gz::sim::systems::Contact">
+    </plugin>
+    <gui fullscreen="0">
+          <!-- 3D scene -->
+          <plugin filename="MinimalScene" name="3D View">
+            <gz-gui>
+              <title>3D View</title>
+              <property type="bool" key="showTitleBar">false</property>
+              <property type="string" key="state">docked</property>
+            </gz-gui>
+            <engine>ogre2</engine>
+            <scene>scene</scene>
+            <ambient_light>0.4 0.4 0.4</ambient_light>
+            <background_color>0.8 0.8 0.8</background_color>
+            <camera_pose>-3.5 0 6 0 1.27 0</camera_pose>
+            <camera_clip>
+              <near>0.25</near>
+              <far>25000</far>
+            </camera_clip>
+          </plugin>
+          
+          <!-- Insert simple shapes -->
+          <plugin filename="Shapes" name="Shapes">
+            <gz-gui>
+              <property key="resizable" type="bool">false</property>
+              <property key="x" type="double">0</property>
+              <property key="y" type="double">0</property>
+              <property key="width" type="double">250</property>
+              <property key="height" type="double">50</property>
+              <property key="state" type="string">floating</property>
+              <property key="showTitleBar" type="bool">false</property>
+              <property key="cardBackground" type="string">#666666</property>
+            </gz-gui>
+          </plugin>
+          <!-- Translate / rotate -->
+          <plugin filename="TransformControl" name="Transform control">
+            <gz-gui>
+              <property key="resizable" type="bool">false</property>
+              <property key="x" type="double">0</property>
+              <property key="y" type="double">50</property>
+              <property key="width" type="double">250</property>
+              <property key="height" type="double">50</property>
+              <property key="state" type="string">floating</property>
+              <property key="showTitleBar" type="bool">false</property>
+              <property key="cardBackground" type="string">#777777</property>
+            </gz-gui>
+          </plugin>
+
+
+          <!-- Entity tree -->
+          <plugin filename="EntityTree" name="Entity tree">
+            <gz-gui>
+              <property type="string" key="state">docked_collapsed</property>
+            </gz-gui>
+          </plugin>
+
+
+          <!-- Inspector -->
+          <plugin filename="ComponentInspector" name="Component inspector">
+            <gz-gui>
+              <property type="string" key="state">docked_collapsed</property>
+            </gz-gui>
+          </plugin>
+
+          
+          <!-- World control -->
+          <plugin filename="WorldControl" name="World control">
+            <gz-gui>
+              <title>World control</title>
+              <property type="bool" key="showTitleBar">false</property>
+              <property type="bool" key="resizable">false</property>
+              <property type="double" key="height">72</property>
+              <property type="double" key="width">121</property>
+              <property type="double" key="z">1</property>
+
+              <property type="string" key="state">floating</property>
+              <anchors target="3D View">
+                <line own="left" target="left"/>
+                <line own="bottom" target="bottom"/>
+              </anchors>
+            </gz-gui>
+
+            <play_pause>true</play_pause>
+            <step>true</step>
+            <start_paused>true</start_paused>
+            <use_event>true</use_event>
+
+          </plugin>
+
+
+          <!-- Teleop -->
+          <plugin filename="Teleop" name="ignition::gui::plugins::Teleop">
+            <topic>/controller/cmd_vel</topic>
+            <ignition-gui>
+              <property type="bool" key="showTitleBar">true</property>
+              <property type="string" key="state">docked</property>
+              <property key="resizable" type="bool">true</property>
+            </ignition-gui>
+          </plugin>
+
+  
+          <!-- visualize lidar -->
+          <!-- <plugin filename="VisualizeLidar" name="Visualize Lidar"></plugin> -->
+
+          <!-- View angle -->
+          <plugin filename="ViewAngle" name="View angle">
+            <gz-gui>
+              <property type="string" key="state">docked_collapsed</property>
+            </gz-gui>
+          </plugin>
+
+          <!-- Plugins that add functionality to the scene -->
+          <plugin filename="EntityContextMenuPlugin" name="Entity context menu">
+          <gz-gui>
+            <property key="state" type="string">floating</property>
+            <property key="width" type="double">5</property>
+            <property key="height" type="double">5</property>
+            <property key="showTitleBar" type="bool">false</property>
+          </gz-gui>
+          </plugin>
+          <plugin filename="GzSceneManager" name="Scene Manager">
+          <gz-gui>
+            <property key="resizable" type="bool">false</property>
+            <property key="width" type="double">5</property>
+            <property key="height" type="double">5</property>
+            <property key="state" type="string">floating</property>
+            <property key="showTitleBar" type="bool">false</property>
+          </gz-gui>
+          </plugin>
+          <plugin filename="InteractiveViewControl" name="Interactive view control">
+          <gz-gui>
+            <property key="resizable" type="bool">false</property>
+            <property key="width" type="double">5</property>
+            <property key="height" type="double">5</property>
+            <property key="state" type="string">floating</property>
+            <property key="showTitleBar" type="bool">false</property>
+          </gz-gui>
+          </plugin>
+          <plugin filename="CameraTracking" name="Camera Tracking">
+          <gz-gui>
+            <property key="resizable" type="bool">false</property>
+            <property key="width" type="double">5</property>
+            <property key="height" type="double">5</property>
+            <property key="state" type="string">floating</property>
+            <property key="showTitleBar" type="bool">false</property>
+          </gz-gui>
+          </plugin>
+          <plugin filename="MarkerManager" name="Marker manager">
+          <gz-gui>
+            <property key="resizable" type="bool">false</property>
+            <property key="width" type="double">5</property>
+            <property key="height" type="double">5</property>
+            <property key="state" type="string">floating</property>
+            <property key="showTitleBar" type="bool">false</property>
+          </gz-gui>
+          </plugin>
+          <plugin filename="SelectEntities" name="Select Entities">
+          <gz-gui>
+            <anchors target="Select entities">
+              <line own="right" target="right"/>
+              <line own="top" target="top"/>
+            </anchors>
+            <property key="resizable" type="bool">false</property>
+            <property key="width" type="double">5</property>
+            <property key="height" type="double">5</property>
+            <property key="state" type="string">floating</property>
+            <property key="showTitleBar" type="bool">false</property>
+          </gz-gui>
+          </plugin>
+          <plugin filename="VisualizationCapabilities" name="Visualization Capabilities">
+          <gz-gui>
+            <property key="resizable" type="bool">false</property>
+            <property key="width" type="double">5</property>
+            <property key="height" type="double">5</property>
+            <property key="state" type="string">floating</property>
+            <property key="showTitleBar" type="bool">false</property>
+          </gz-gui>
+          </plugin>
+
+          <plugin filename="Spawn" name="Spawn Entities">
+          <gz-gui>
+            <anchors target="Select entities">
+              <line own="right" target="right"/>
+              <line own="top" target="top"/>
+            </anchors>
+            <property key="resizable" type="bool">false</property>
+            <property key="width" type="double">5</property>
+            <property key="height" type="double">5</property>
+            <property key="state" type="string">floating</property>
+            <property key="showTitleBar" type="bool">false</property>
+          </gz-gui>
+          </plugin>
+
+
+
+          <!-- World statistics -->
+          <plugin filename="WorldStats" name="World stats">
+          <gz-gui>
+            <title>World stats</title>
+            <property type="bool" key="showTitleBar">false</property>
+            <property type="bool" key="resizable">false</property>
+            <property type="double" key="height">110</property>
+            <property type="double" key="width">290</property>
+            <property type="double" key="z">1</property>
+
+            <property type="string" key="state">floating</property>
+            <anchors target="3D View">
+              <line own="right" target="right"/>
+              <line own="bottom" target="bottom"/>
+            </anchors>
+          </gz-gui>
+
+          <sim_time>true</sim_time>
+          <real_time>true</real_time>
+          <real_time_factor>true</real_time_factor>
+          <iterations>true</iterations>
+          </plugin>
+
+
+
+          <!-- Insert lights -->
+          <plugin filename="Lights" name="Lights">
+          <gz-gui>
+            <property key="resizable" type="bool">false</property>
+            <property key="x" type="double">250</property>
+            <property key="y" type="double">0</property>
+            <property key="width" type="double">150</property>
+            <property key="height" type="double">50</property>
+            <property key="state" type="string">floating</property>
+            <property key="showTitleBar" type="bool">false</property>
+            <property key="cardBackground" type="string">#666666</property>
+          </gz-gui>
+          </plugin>
+
+
+          <!-- Screenshot -->
+          <plugin filename="Screenshot" name="Screenshot">
+          <gz-gui>
+            <property key="resizable" type="bool">false</property>
+            <property key="x" type="double">250</property>
+            <property key="y" type="double">50</property>
+            <property key="width" type="double">50</property>
+            <property key="height" type="double">50</property>
+            <property key="state" type="string">floating</property>
+            <property key="showTitleBar" type="bool">false</property>
+            <property key="cardBackground" type="string">#777777</property>
+          </gz-gui>
+          </plugin>
+
+
+
+
+    </gui>
+    <scene>
+      <ambient>1.0 1.0 1.0</ambient>
+      <background>0.8 0.8 0.8</background>
+    </scene>
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.94 0.90 0.81 1</ambient>
+            <diffuse>0.94 0.90 0.81 1</diffuse>
+            <specular>1 1 1 0</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 迷宫模型 - 替换原来的RoboCup_Home -->
+    <model name='maze_5x5_complex_connected'>
+      <static>true</static>
+      <pose>0 0 0 0 0 0</pose>
+      <link name='maze_link'>
+
+        <!-- === 地板与标记 === -->
+        <visual name='floor_main'>
+          <pose>0 0 0.005 0 0 0</pose>
+          <geometry><box><size>3.5 3.5 0.01</size></box></geometry>
+          <material><script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/WoodFloor</name></script></material>
+        </visual>
+        <!-- 起点标记 (中心位置) -->
+        <visual name='start_mark'>
+          <pose>0 0 0.006 0 0 0</pose>
+          <geometry><box><size>0.3 0.3 0.001</size></box></geometry>
+          <material><ambient>0 1 0 1</ambient><diffuse>0 1 0 1</diffuse></material>
+        </visual>
+        <!-- 终点标记 -->
+        <visual name='end_mark'>
+          <pose>1.4 1.4 0.006 0 0 0</pose>
+          <geometry><box><size>0.3 0.3 0.001</size></box></geometry>
+          <material><ambient>1 0 0 1</ambient><diffuse>1 0 0 1</diffuse></material>
+        </visual>
+
+        <!-- 外墙 -->
+        <visual name='wall_n'><pose>0 1.75 0.175 0 0 0</pose><geometry><box><size>3.52 0.02 0.35</size></box></geometry><material><ambient>0.8 0.8 0.8 1</ambient><diffuse>0.8 0.8 0.8 1</diffuse><specular>0.8 0.8 0.8 1</specular></material></visual>
+        <collision name='col_n'><pose>0 1.75 0.175 0 0 0</pose><geometry><box><size>3.52 0.02 0.35</size></box></geometry></collision>
+        <visual name='wall_s'><pose>0 -1.75 0.175 0 0 0</pose><geometry><box><size>3.52 0.02 0.35</size></box></geometry><material><ambient>0.8 0.8 0.8 1</ambient><diffuse>0.8 0.8 0.8 1</diffuse><specular>0.8 0.8 0.8 1</specular></material></visual>
+        <collision name='col_s'><pose>0 -1.75 0.175 0 0 0</pose><geometry><box><size>3.52 0.02 0.35</size></box></geometry></collision>
+        <visual name='wall_w'><pose>-1.75 0 0.175 0 0 0</pose><geometry><box><size>0.02 3.52 0.35</size></box></geometry><material><ambient>0.8 0.8 0.8 1</ambient><diffuse>0.8 0.8 0.8 1</diffuse><specular>0.8 0.8 0.8 1</specular></material></visual>
+        <collision name='col_w'><pose>-1.75 0 0.175 0 0 0</pose><geometry><box><size>0.02 3.52 0.35</size></box></geometry></collision>
+        <visual name='wall_e'><pose>1.75 0 0.175 0 0 0</pose><geometry><box><size>0.02 3.52 0.35</size></box></geometry><material><ambient>0.8 0.8 0.8 1</ambient><diffuse>0.8 0.8 0.8 1</diffuse><specular>0.8 0.8 0.8 1</specular></material></visual>
+        <collision name='col_e'><pose>1.75 0 0.175 0 0 0</pose><geometry><box><size>0.02 3.52 0.35</size></box></geometry></collision>
+
+        <!-- === 内部墙体 (Internal Walls) === -->
+        <!-- 调整到70×70栅格，按照提供的迷宫布局 -->
+        
+        <!-- 纵向墙 (Vertical Walls) -->
+        <!-- Row 0 (最下行) -->
+        <visual name='v_r0_c01'> <pose>-1.05 -1.4 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_v_r0_c01'> <pose>-1.05 -1.4 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> </collision>
+
+        <!-- Row 1 -->
+        <visual name='v_r1_c12'> <pose>-0.35 -0.7 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_v_r1_c12'> <pose>-0.35 -0.7 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> </collision>
+
+        <!-- Row 2 (中间行) -->
+        <visual name='v_r2_c23'> <pose>0.35 0.0 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_v_r2_c23'> <pose>0.35 0.0 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> </collision>
+
+        <!-- Row 3 -->
+        <visual name='v_r3_c12'> <pose>-0.35 0.7 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_v_r3_c12'> <pose>-0.35 0.7 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> </collision>
+
+        <visual name='v_r3_c34'> <pose>1.05 0.7 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_v_r3_c34'> <pose>1.05 0.7 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> </collision>
+
+        <!-- Row 4 (最上行) -->
+        <visual name='v_r4_c01'> <pose>-1.05 1.4 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_v_r4_c01'> <pose>-1.05 1.4 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> </collision>
+
+        <visual name='v_r4_c23'> <pose>0.35 1.4 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_v_r4_c23'> <pose>0.35 1.4 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> </collision>
+
+        <visual name='v_r4_c34'> <pose>1.05 1.4 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_v_r4_c34'> <pose>1.05 1.4 0.175 0 0 0</pose> <geometry><box><size>0.02 0.7 0.35</size></box></geometry> </collision>
+
+        <!-- 横向墙 (Horizontal Walls) -->
+        <!-- Col 0 (最左列) -->
+        <visual name='h_c0_r12'> <pose>-1.4 -0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_h_c0_r12'> <pose>-1.4 -0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> </collision>
+
+        <!-- Col 1 -->
+        <visual name='h_c1_r12'> <pose>-0.7 -0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_h_c1_r12'> <pose>-0.7 -0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> </collision>
+
+        <visual name='h_c1_r23'> <pose>-0.7 0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_h_c1_r23'> <pose>-0.7 0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> </collision>
+
+        <!-- Col 2 (中间列) -->
+        <visual name='h_c2_r01'> <pose>0.0 -1.05 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_h_c2_r01'> <pose>0.0 -1.05 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> </collision>
+
+        <visual name='h_c2_r23'> <pose>0.0 0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_h_c2_r23'> <pose>0.0 0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> </collision>
+
+        <!-- Col 3 -->
+        <visual name='h_c3_r01'> <pose>0.7 -1.05 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_h_c3_r01'> <pose>0.7 -1.05 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> </collision>
+
+        <visual name='h_c3_r12'> <pose>0.7 -0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_h_c3_r12'> <pose>0.7 -0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> </collision>
+
+        <!-- Col 4 (最右列) -->
+        <visual name='h_c4_r12'> <pose>1.4 -0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material> </visual>
+        <collision name='c_h_c4_r12'> <pose>1.4 -0.35 0.175 0 0 0</pose> <geometry><box><size>0.7 0.02 0.35</size></box></geometry> </collision>
+      </link>
+    </model>
+
+    <!-- Demo pickup block: red cube at robot origin frame -->
+    <model name='demo_block_red'>
+      <pose>1.4 -1.4 0.020 0 0 0</pose>
+      <static>false</static>
+      <link name='body'>
+        <inertial>
+          <mass>0.03</mass>
+          <inertia>
+            <ixx>6.1e-06</ixx>
+            <iyy>6.1e-06</iyy>
+            <izz>6.1e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.035 0.035 0.035</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>0xff</collide_bitmask>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+                <slip1>0.0</slip1>
+                <slip2>0.0</slip2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <box>
+              <size>0.035 0.035 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.1 0.1 1</ambient>
+            <diffuse>0.9 0.1 0.1 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Additional green cube elsewhere in maze -->
+    <model name='demo_block_green'>
+      <pose>0.0 0.7 0.0175 0 0 0</pose>
+      <static>false</static>
+      <link name='body'>
+        <inertial>
+          <mass>0.03</mass>
+          <inertia>
+            <ixx>6.1e-06</ixx>
+            <iyy>6.1e-06</iyy>
+            <izz>6.1e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.035 0.035 0.035</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>0xff</collide_bitmask>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+                <slip1>0.0</slip1>
+                <slip2>0.0</slip2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <box>
+              <size>0.035 0.035 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.1 0.9 0.1 1</ambient>
+            <diffuse>0.1 0.9 0.1 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>

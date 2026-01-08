@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="gripper">
+  <xacro:property name="mesh_dir" value="package://landerpi_description/meshes/gripper" />
+
+  <link name="gripper_base_link">
+    <inertial>
+      <origin xyz="-6.00387841184769E-06 3.66640463149437E-07 -0.00259069623352681"
+        rpy="0 0 0" />
+      <mass value="0.000873002769910741" />
+      <inertia ixx="7.03979207725115E-08" ixy="-1.16752365714445E-12" ixz="4.38954049992681E-12"
+        iyy="7.52132333332646E-09" iyz="-3.29155708377714E-13" izz="7.17005068808903E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/gripper_base_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/gripper_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="gripper_base_joint" type="revolute">
+    <origin xyz="0.0090501974019627 0 0.0215396893640707" rpy="0 0.000338504372026846 0" />
+    <parent link="gripper_link" />
+    <child link="gripper_base_link" />
+    <axis xyz="0.000263600641267252 0 -0.99999996525735" />
+    <limit lower="-1.7453" upper="0" effort="1000" velocity="10" />
+  </joint>
+
+  <link name="gripper_left_link">
+    <inertial>
+      <origin xyz="-0.00564577758949344 0.00921461972443496 -0.00149999696741121"
+        rpy="0 0 0" />
+      <mass value="0.000678657668515545" />
+      <inertia ixx="3.8283787514874E-08" ixy="1.00832665382042E-09" ixz="6.19104484553246E-15"
+        iyy="1.25438703029822E-08" iyz="-5.41614987043778E-16" izz="4.98096713150767E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/gripper_left_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/gripper_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="gripper_left_join" type="revolute">
+    <origin xyz="0 0.013498569829406 0.00300000000438255" rpy="0 0 0" />
+    <parent link="gripper_base_link" />
+    <child link="gripper_left_link" />
+    <axis xyz="0 0 -0.999999999999856" />
+    <limit lower="-2.4569" upper="2.4569" effort="1000" velocity="10" />
+    <mimic joint="gripper_base_joint" multiplier="-1.5" offset="0" />
+  </joint>
+
+  <link name="gripper_right_link">
+    <inertial>
+      <origin xyz="0.00564577597805638 -0.00921461972443462 -0.00150000303258813"
+        rpy="0 0 0" />
+      <mass value="0.000678657668515777" />
+      <inertia ixx="3.82837875148817E-08" ixy="1.00832665381724E-09" ixz="6.19104509864972E-15"
+        iyy="1.25438703029911E-08" iyz="-5.4161522390905E-16" izz="4.98096713150926E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/gripper_right_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/gripper_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="gripper_right_joint" type="revolute">
+    <origin xyz="0 -0.0134985698294079 0.00300000000438277" rpy="0 0 0" />
+    <parent link="gripper_base_link" />
+    <child link="gripper_right_link" />
+    <axis xyz="0 0 -0.999999999999856" />
+    <limit lower="-2.4569" upper="2.4569" effort="1000" velocity="10" />
+    <mimic joint="gripper_base_joint" multiplier="-1.5" offset="0" />
+  </joint>
+
+  <link name="guide_rod_link">
+    <inertial>
+      <origin xyz="-0.00305703157645135 -0.000727418064979786 -0.00459974184488737"
+        rpy="0 0 0" />
+      <mass value="0.00907143017381809" />
+      <inertia ixx="4.3395070575534E-06" ixy="-1.33976830501825E-18" ixz="-9.87322779143294E-21"
+        iyy="4.51461322417536E-07" iyz="-3.14190158108138E-19" izz="4.6171840506198E-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/guide_rod_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/guide_rod_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="guide_rod_joint" type="fixed">
+    <origin xyz="0.0121014740059695 0.000728801919480632 0.0388709294658248"
+      rpy="0 0.000338504372026846 0" />
+    <parent link="gripper_link" />
+    <child link="guide_rod_link" />
+    <axis xyz="0 0 0" />
+    <limit lower="0" upper="0.019" effort="0" velocity="0" />
+  </joint>
+
+  <link name="left_jaw_link">
+    <inertial>
+      <origin xyz="-0.00692720878121303 -0.00636196224714537 0.00893419676758717"
+        rpy="0 0 0" />
+      <mass value="0.00698119780202707" />
+      <inertia ixx="4.11153350368586E-07" ixy="1.43283946185551E-11" ixz="4.0510102352892E-10"
+        iyy="8.21175491559252E-07" iyz="1.47906851962539E-08" izz="5.56175193017298E-07" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/left_jaw_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/left_jaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="left_jaw_joint" type="prismatic">
+    <origin xyz="0.003943 0.036774 -0.003" rpy="0 0 0" />
+    <parent link="guide_rod_link" />
+    <child link="left_jaw_link" />
+    <axis xyz="0 -1 0" />
+    <limit lower="0" upper="0.019" effort="2" velocity="0.2" />
+    <mimic joint="gripper_base_joint" multiplier="-0.0115995" offset="0" />
+  </joint>
+
+  <link name="right_jaw_link">
+    <inertial>
+      <origin xyz="-0.00692720838825259 0.00636256719791402 0.00893419699109832"
+        rpy="0 0 0" />
+      <mass value="0.0069811984007387" />
+      <inertia ixx="4.11153372383867E-07" ixy="-1.43302386523383E-11" ixz="4.05023467073843E-10"
+        iyy="8.21175489526134E-07" iyz="-1.47906922343745E-08" izz="5.56175178351196E-07" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/right_jaw_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_dir}/right_jaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="right_jaw_joint" type="prismatic">
+    <origin xyz="0.003943 -0.038229 -0.003" rpy="0 0 0" />
+    <parent link="guide_rod_link" />
+    <child link="right_jaw_link" />
+    <axis xyz="0 -1 0" />
+    <limit lower="-0.019" upper="0" effort="2" velocity="0.5" />
+    <mimic joint="gripper_base_joint" multiplier="0.0115995" offset="0" />
+  </joint>
+
+
+</robot>

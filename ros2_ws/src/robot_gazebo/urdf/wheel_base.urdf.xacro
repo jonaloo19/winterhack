@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="wheel_base" xmlns:xacro="http://ros.org/wiki/xacro" >
+
+    <xacro:macro name="cylinder_link_macro" params="suffix mass arg radius length if_collision if_visual">
+        <xacro:property name="sq_r" value="${radius*radius}"/>
+        <xacro:property name="sq_l" value="${length*length}"/>
+        <link name="${suffix}_link">
+            <inertial>
+                <mass value="${mass}"/>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <inertia ixx="${3*sq_r*arg/12+sq_l*arg/12}" ixy="0.0" ixz="0.0" iyy="${3*sq_r*arg/12+sq_l*arg/12}" 
+                iyz="0.0" izz="${arg*sq_r/2}"/>
+            </inertial>
+            <xacro:if value="${if_visual}">
+                <visual>
+                    <geometry>
+                        <cylinder length="${length}" radius="${radius}"/>
+                    </geometry>
+                    <material name="red">
+                        <color rgba="1.0 0.0 0.0 1.0"/>
+                    </material>
+                </visual>
+            </xacro:if>
+            <xacro:if value="${if_collision}">
+                <collision>
+                    <geometry>
+                        <cylinder length="${length}" radius="${radius}"/>
+                    </geometry>
+                    <origin xyz="0 0 0" rpy="0 0 0"/>
+                </collision>
+            </xacro:if>
+        </link>
+    </xacro:macro>
+
+    <xacro:macro name="steer_macro" params="suffix parent base_radius wheel_radius wheel_offset x y z">
+        <xacro:cylinder_link_macro suffix="top_${suffix}_base" mass="1.0" arg="1.0" radius="${base_radius}" length="0.001" if_collision="false" if_visual="false"/>
+        <joint name="top_${suffix}_base_joint" type="continuous">
+            <parent link="${parent}"/>
+            <child  link="top_${suffix}_base_link"/>
+            <origin xyz="${x} ${y} ${z+0.1}" rpy="0 0 0"/>
+            <axis xyz="0 0 1"/>
+        </joint>
+
+        <xacro:cylinder_link_macro suffix="bottom_${suffix}_base" mass="1.0" arg="100000.0" radius="${base_radius}" length="0.001" if_collision="false" if_visual="false"/>
+        <joint name="bottom_${suffix}_base_joint" type="continuous">
+            <parent link="top_${suffix}_base_link"/>
+            <child  link="bottom_${suffix}_base_link"/>
+            <origin xyz="${x} ${y} ${z-0.1}" rpy="0 0 0"/>
+            <axis xyz="0 0 1"/>
+        </joint>
+
+        <xacro:cylinder_link_macro suffix="${suffix}" mass="0.0001" arg="0.0001" radius="${wheel_radius}" length="0.1" if_collision="true" if_visual="false"/>
+        <joint name="${suffix}_joint" type="continuous">
+            <parent link="bottom_${suffix}_base_link"/>
+            <child  link="${suffix}_link"/>
+            <origin xyz="0 0 ${wheel_offset}" rpy="-1.57 0 0"/>
+            <axis xyz="0 0 1"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:steer_macro suffix="wheel" parent="base_footprint" base_radius="0.3" wheel_radius="0.152" x="0" y="0" z="0" wheel_offset="0.1495"/>
+
+
+
+    <xacro:macro name="sphere_macro" params="suffix parent mass arg radius x y z">
+        <xacro:property name="inertia" value="${2/5*arg*radius*radius}"/>
+        <link name="${suffix}_link">
+            <inertial>
+                <mass value="${mass}"/>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <inertia ixx="${inertia}" ixy="0.0" ixz="0.0" iyy="${inertia}" iyz="0.0" izz="${inertia}"/>
+            </inertial>
+            <visual>
+                <geometry>
+                    <sphere radius="${radius}"/>
+                </geometry>
+                <material name="green">
+                    <color rgba="0.0 1.0 0.0 0.0"/>
+                </material>
+            </visual>
+            <collision>
+                <geometry>
+                    <sphere radius="${radius}"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+            </collision>
+        </link>
+
+        <joint name="${suffix}_joint" type="fixed">
+            <origin rpy="0 0 0" xyz="${x} ${y} ${z}"/>
+            <parent link="${parent}"/>
+            <child  link="${suffix}_link"/>
+        </joint>
+    </xacro:macro>
+
+
+
+    <xacro:property name="base_size" value="0.16"/>
+    <xacro:macro name="four_wheel_caster_macro" params="parent base_radius caster_radius z_offset">
+        <xacro:property name="x" value="${base_radius*cos(pi/4)}" />
+        <xacro:sphere_macro suffix="caster1" parent="${parent}" mass="0.3" arg="0.3" radius="${caster_radius}" x="${x}" y="${x}" z="${z_offset}"/>
+        <xacro:sphere_macro suffix="caster2" parent="${parent}" mass="0.3" arg="0.3" radius="${caster_radius}" x="${-x}" y="${x}" z="${z_offset}"/>
+        <xacro:sphere_macro suffix="caster3" parent="${parent}" mass="0.3" arg="0.3" radius="${caster_radius}" x="${-x}" y="${-x}" z="${z_offset}"/>
+        <xacro:sphere_macro suffix="caster4" parent="${parent}" mass="0.3" arg="0.3" radius="${caster_radius}" x="${x}" y="${-x}" z="${z_offset}"/>
+    </xacro:macro>
+    
+    <xacro:four_wheel_caster_macro parent="base_link" base_radius="${sqrt(base_size/2*base_size/2*2)}" caster_radius="0.041" z_offset="-0.015"/>
+
+
+    <xacro:macro name="rectangular_link_macro" params="suffix mass arg width depth height if_collision if_visual">
+        <xacro:property name="sq_w" value="${width*width}"/>
+        <xacro:property name="sq_d" value="${depth*depth}"/>
+        <xacro:property name="sq_h" value="${height*height}"/>
+        <link name="${suffix}_link">
+            <inertial>
+                <mass value="${mass}"/>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <inertia ixx="${arg*sq_d/12+arg*sq_h/12}" ixy="0.0" ixz="0.0" 
+                iyy="${arg*sq_w/12+arg*sq_h/12}" iyz="0.0" izz="${arg*sq_w/12+arg*sq_d/12}"/>
+            </inertial>
+            <xacro:if value="${if_visual}">
+                <visual>
+                    <geometry>
+                        <box size="${width} ${depth} ${height}"/>
+                    </geometry>
+                    <material name="blue">
+                        <color rgba="0.0 0.0 1.0 0.0"/>
+                    </material>
+                </visual>
+            </xacro:if>
+            <xacro:if value="${if_collision}">
+                <collision>
+                    <geometry>
+                        <box size="${width} ${depth} ${height}"/>
+                    </geometry>
+                    <origin xyz="0 0 0" rpy="0 0 0"/>
+                </collision>
+            </xacro:if>
+        </link>
+    </xacro:macro>
+
+    <xacro:rectangular_link_macro suffix="top_plate" mass="5.0" arg="5.0" width="0.3" height="0.1" depth="0.15" if_collision="true" if_visual="false"/>
+
+    <joint name="top_plate_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="top_plate_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/> </joint>
+
+</robot>

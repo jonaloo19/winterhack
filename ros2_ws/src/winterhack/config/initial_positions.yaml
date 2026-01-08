@@ -1,0 +1,9 @@
+# Default initial positions for rosmentor's ros2_control fake system
+
+initial_positions:
+  gripper_base_joint: 0
+  joint1: 0
+  joint2: 0.83776
+  joint3: -2.03156
+  joint4: -1.19380
+  joint5: 0

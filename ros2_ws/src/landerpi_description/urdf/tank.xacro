@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mecanum">
+  <!-- 定义 mesh 文件目录 -->
+  <xacro:property name="mesh_dir" value="package://landerpi_description/meshes/tank" />
+
+  <link name="base_footprint"/>
+  
+  <joint name="base_footprint_to_base_link" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0.054" rpy="0 0 0"/>
+  </joint>
+
+  <!-- base_link -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0.00504187685192947 1.09185161661918E-07 -0.00805033236351077" rpy="0 0 0"/>
+      <mass value="0.0549114964726037"/>
+      <inertia ixx="8.19348226076021E-05" ixy="5.66571121584358E-10" ixz="2.76933476090848E-06"
+               iyy="0.000261801130920988" iyz="-1.79231384469249E-11" izz="0.000329791457319821"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/base_link.STL"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/base_link.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- back_shell_middle_link -->
+  <link name="back_shell_middle_link">
+    <inertial>
+      <origin xyz="0.00487711474723631 1.58762278157365E-07 -0.0025628797569202" rpy="0 0 0"/>
+      <mass value="0.0327390228163219"/>
+      <inertia ixx="3.38631253668824E-05" ixy="7.24209708084898E-10" ixz="9.18555297431044E-07"
+               iyy="0.000107001002646437" iyz="8.06260466878324E-12" izz="0.000139946335953909"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/back_shell_middle_link.STL"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/back_shell_middle_link.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- back_shell_middle_joint -->
+  <joint name="back_shell_middle_joint" type="fixed">
+    <origin xyz="-0.00442651562530816 0 0.018000006985512" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="back_shell_middle_link"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+  <!-- back_shell_black_link -->
+  <link name="back_shell_black_link">
+    <inertial>
+      <origin xyz="0.0364751228771575 0.00800016520300745 -0.0179166675870939" rpy="0 0 0"/>
+      <mass value="0.0362085392306972"/>
+      <inertia ixx="1.7023595821949E-05" ixy="-1.07750548549886E-10" ixz="2.70156859176498E-07"
+               iyy="2.27446031500068E-05" iyz="8.68993602274957E-12" izz="3.11741389762819E-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/back_shell_black_link.STL"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/back_shell_black_link.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- back_shell_black_joint -->
+  <joint name="back_shell_black_joint" type="fixed">
+    <origin xyz="-0.0308199337666247 -0.00800013814077391 0.0599417668336678" rpy="0 0 0"/>
+    <parent link="back_shell_middle_link"/>
+    <child link="back_shell_black_link"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+  <!-- lidar_link -->
+  <link name="lidar_frame">
+    <inertial>
+      <origin xyz="8.95525878428366E-05 6.449498190296E-05 -0.00525031924280694" rpy="0 0 0"/>
+      <mass value="0.0385601724394132"/>
+      <inertia ixx="4.66264242687519E-06" ixy="-1.6072319384352E-07" ixz="2.0526387548096E-09"
+               iyy="4.71597786598089E-06" iyz="1.10063344618588E-08" izz="7.61241693698137E-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/lidar_link.STL"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/lidar_link.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- lidar_joint -->
+  <joint name="lidar_joint" type="fixed">
+    <origin xyz="0.077447689677331 0 0.0206999999999998" rpy="0 0 0"/>
+    <parent link="back_shell_middle_link"/>
+    <child link="lidar_frame"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+  <!-- imu_link -->
+  <link name="imu_link">
+    <inertial>
+      <origin xyz="-1.58746927422793E-07 0.00487711474723681 -0.0025628797569202" rpy="0 0 0"/>
+      <mass value="0.0327390228163275"/>
+      <inertia ixx="0.000107001002646432" ixy="-7.24439910059297E-10" ixz="-8.05971351094487E-12"
+               iyy="3.3863125366887E-05" iyz="9.18555297431072E-07" izz="0.000139946335953909"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/imu_link.STL"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/imu_link.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- imu_joint -->
+  <joint name="imu_joint" type="fixed">
+    <origin xyz="-0.00442651562530816 0 0.018000006985512" rpy="0 0 -1.5707963260426"/>
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+</robot>

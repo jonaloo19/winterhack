@@ -1,0 +1,28 @@
+colors:
+  red:
+    name: RED
+    bgr_color: [0, 0, 255]
+    lower1: [0, 120, 70]
+    upper1: [10, 255, 255]
+    lower2: [170, 120, 70]
+    upper2: [180, 255, 255]
+  green:
+    name: GREEN
+    bgr_color: [0, 255, 0]
+    lower: [35, 40, 40]
+    upper: [85, 255, 255]
+  blue:
+    name: BLUE
+    bgr_color: [255, 0, 0]
+    lower: [100, 150, 0]
+    upper: [140, 255, 255]
+  yellow:
+    name: YELLOW
+    bgr_color: [0, 255, 255]
+    lower: [20, 100, 100]
+    upper: [30, 255, 255]
+
+detection:
+  min_area: 200
+  max_area: 200000
+  blur_size: 5

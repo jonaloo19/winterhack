@@ -1,0 +1,77 @@
+/**:
+  ros__parameters:
+    # 🕒 仿真时间同步
+    use_sim_time: true
+
+    # Plugin params
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_dogleg_type: TRADITIONAL_DOGLEG
+    ceres_loss_function: None
+
+    # ROS Parameters
+    odom_frame: odom
+    map_frame: map
+    base_frame: base_link
+    scan_topic: scan
+    use_map_saver: true
+    mode: mapping  #localization
+
+    # if you'd like to immediately start continuing a map at a given pose
+    # or at the dock, but they are mutually exclusive, if pose is given
+    # will use pose
+    #map_file_name: test_steve
+    #map_start_pose: [0.0, 0.0, 0.0]
+    #map_start_at_dock: true
+
+    debug_logging: false
+    throttle_scans: 1
+    transform_publish_period: 0.02 #if 0 never publishes odometry
+    map_update_interval: 0.2
+    resolution: 0.05
+    minimum_laser_range: 0.08 # lidar min range
+    max_laser_range: 10.0 #for rastering images
+    minimum_time_interval: 0.3 # 降低最小时间间隔，提高响应速度
+    transform_timeout: 1.0    # 增加超时时间，应对时间跳跃
+    tf_buffer_duration: 60.   # 增加TF缓冲区时间
+    stack_size_to_use: 40000000 #// program needs a larger stack size to serialize large maps
+    enable_interactive_mode: true
+
+    # General Parameters
+    use_scan_matching: false  # 完全关闭扫描匹配，纯里程计模式
+    use_scan_barycenter: true
+    minimum_travel_distance: 0.15 # 增加移动距离，让里程计主导
+    minimum_travel_heading: 0.2   # 增加角度阈值，让里程计主导
+    scan_buffer_size: 30              # 增加扫描缓冲区，提高稳定性
+    scan_buffer_maximum_scan_distance: 12.0
+    link_match_minimum_response_fine: 0.3  # 提高匹配阈值，减少扫描匹配频率
+    link_scan_maximum_distance: 1.5
+    loop_search_maximum_distance: 3.0
+    do_loop_closing: true
+    loop_match_minimum_chain_size: 10
+    loop_match_maximum_variance_coarse: 3.0
+    loop_match_minimum_response_coarse: 0.6   # 提高粗匹配阈值，优先里程计
+    loop_match_minimum_response_fine: 0.7     # 提高精细匹配阈值，优先里程计
+
+    # Correlation Parameters - Correlation Parameters
+    correlation_search_space_dimension: 0.5   # 仿真环境中增大搜索空间
+    correlation_search_space_resolution: 0.01 # 仿真环境中提高分辨率
+    correlation_search_space_smear_deviation: 0.1
+
+    # Correlation Parameters - Loop Closure Parameters
+    loop_search_space_dimension: 8.0
+    loop_search_space_resolution: 0.05
+    loop_search_space_smear_deviation: 0.03
+
+    # Scan Matcher Parameters
+    distance_variance_penalty: 1.2    # 增加距离惩罚，降低扫描匹配权重
+    angle_variance_penalty: 2.0       # 增加角度惩罚，降低扫描匹配权重
+
+    fine_search_angle_offset: 0.00349
+    coarse_search_angle_offset: 0.349
+    coarse_angle_resolution: 0.0175   # 提高角度分辨率
+    minimum_angle_penalty: 1.5        # 增加最小角度惩罚，优先里程计
+    minimum_distance_penalty: 1.0     # 增加最小距离惩罚，优先里程计
+    use_response_expansion: true

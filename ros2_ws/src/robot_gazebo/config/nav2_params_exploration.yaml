@@ -1,0 +1,321 @@
+# amcl: # 探索模式使用SLAM定位，不需要AMCL
+#   ros__parameters:
+#     (AMCL配置已注释)
+behavior_server:
+  ros__parameters:
+    backup:
+      plugin: nav2_behaviors/BackUp
+      backup_dist: 0.1
+      backup_speed: 0.05
+      time_allowance: 5.0
+    behavior_plugins:
+    - spin
+    - backup
+    - drive_on_heading
+    - wait
+    costmap_topic: local_costmap/costmap_raw
+    cycle_frequency: 10.0
+    drive_on_heading:
+      plugin: nav2_behaviors/DriveOnHeading
+    footprint_topic: local_costmap/published_footprint
+    global_frame: odom
+    max_rotational_vel: 1.0
+    min_rotational_vel: 0.4
+    robot_base_frame: base_link
+    rotational_acc_lim: 3.2
+    simulate_ahead_time: 2.0
+    spin:
+      plugin: nav2_behaviors/Spin
+      simulate_ahead_time: 2.0
+      max_rotational_vel: 1.0
+      min_rotational_vel: 0.4
+      rotational_acc_lim: 3.2
+      time_allowance: 10.0
+    transform_tolerance: 0.1
+    use_sim_time: true
+    wait:
+      plugin: nav2_behaviors/Wait
+bt_navigator:
+  ros__parameters:
+    bt_loop_duration: 20              # 增加BT循环时间，减少超时
+    default_server_timeout: 60        # 增加默认服务器超时
+    enable_groot_monitoring: true
+    global_frame: map
+    groot_zmq_publisher_port: 1666
+    groot_zmq_server_port: 1667
+    odom_topic: /odom
+    plugin_lib_names:
+    - nav2_compute_path_to_pose_action_bt_node
+    - nav2_compute_path_through_poses_action_bt_node
+    - nav2_smooth_path_action_bt_node
+    - nav2_follow_path_action_bt_node
+    - nav2_spin_action_bt_node
+    - nav2_wait_action_bt_node
+    - nav2_back_up_action_bt_node
+    - nav2_drive_on_heading_bt_node
+    - nav2_clear_costmap_service_bt_node
+    - nav2_is_stuck_condition_bt_node
+    - nav2_goal_reached_condition_bt_node
+    - nav2_goal_updated_condition_bt_node
+    - nav2_globally_updated_goal_condition_bt_node
+    - nav2_is_path_valid_condition_bt_node
+    - nav2_initial_pose_received_condition_bt_node
+    - nav2_reinitialize_global_localization_service_bt_node
+    - nav2_rate_controller_bt_node
+    - nav2_distance_controller_bt_node
+    - nav2_speed_controller_bt_node
+    - nav2_truncate_path_action_bt_node
+    - nav2_truncate_path_local_action_bt_node
+    - nav2_goal_updater_node_bt_node
+    - nav2_recovery_node_bt_node
+    - nav2_pipeline_sequence_bt_node
+    - nav2_round_robin_node_bt_node
+    - nav2_transform_available_condition_bt_node
+    - nav2_time_expired_condition_bt_node
+    - nav2_path_expiring_timer_condition
+    - nav2_distance_traveled_condition_bt_node
+    - nav2_single_trigger_bt_node
+    - nav2_is_battery_low_condition_bt_node
+    - nav2_navigate_through_poses_action_bt_node
+    - nav2_navigate_to_pose_action_bt_node
+    - nav2_remove_passed_goals_action_bt_node
+    - nav2_planner_selector_bt_node
+    - nav2_controller_selector_bt_node
+    - nav2_goal_checker_selector_bt_node
+    - nav2_controller_cancel_bt_node
+    - nav2_path_longer_on_approach_bt_node
+    - nav2_wait_cancel_bt_node
+    - nav2_spin_cancel_bt_node
+    - nav2_back_up_cancel_bt_node
+    - nav2_drive_on_heading_cancel_bt_node
+    robot_base_frame: base_link
+    use_sim_time: true
+controller_server:
+  ros__parameters:
+    odom_topic: /odom
+    use_sim_time: true
+    controller_frequency: 5.0        # 提高到5Hz，减少误判
+    
+    # 容错性参数
+    min_x_velocity_threshold: 0.001
+    min_theta_velocity_threshold: 0.001
+    failure_tolerance: 2.0
+
+    # Progress checker parameters - 防止误判“撞到”
+    progress_checker_plugin: "progress_checker"
+    progress_checker:
+      plugin: "nav2_controller::SimpleProgressChecker"
+      required_movement_radius: 0.1   # 适中移动要求
+      movement_time_allowance: 30.0   # 适中时间容忍
+    
+    # Goal checker parameters
+    goal_checker_plugins: ["goal_checker"] 
+    goal_checker:
+      stateful: true
+      plugin: "nav2_controller::SimpleGoalChecker"
+      xy_goal_tolerance: 0.25          # 适中位置容忍度
+      yaw_goal_tolerance: 6.28         # 完全忽略角度要求 (2π)
+      check_xy: true                   # 只检查位置
+      check_yaw: false                 # 完全禁用角度检查
+
+    # Controller plugins
+    controller_plugins: ["FollowPath"]
+    FollowPath:
+      plugin: teb_local_planner::TebLocalPlannerROS
+      
+      # 基本机器人参数
+      max_vel_x: 0.5
+      max_vel_theta: 2.0
+      acc_lim_x: 1.5
+      acc_lim_theta: 3.0
+      
+      # 目标容忍度
+      xy_goal_tolerance: 0.2
+      yaw_goal_tolerance: 0.3
+      
+      # 避障参数
+      min_obstacle_dist: 0.15
+      weight_obstacle: 50.0
+      
+      # 简化TEB配置，确保基本导航功能
+      dt_ref: 0.3
+      weight_optimaltime: 1.0
+      
+      # 确保正方向行驶的关键参数
+      global_plan_overwrite_orientation: true
+      weight_kinematics_forward_drive: 100.0
+      
+      # 转向增强
+      weight_kinematics_nh: 1000.0
+      min_turning_radius: 0.0
+      
+      # 强化路径方向跟随
+      weight_viapoint: 50.0
+      max_global_plan_lookahead_dist: 0.8
+      global_plan_viapoint_sep: 0.2
+      
+      # 方向一致性控制
+      prefer_rotdir_to_goal: true
+      weight_prefer_rotdir: 20.0
+      
+      # 防止反方向行驶
+      exact_arc_length: false
+      weight_adapt_factor: 2.0
+      
+      # 基本优化
+      no_inner_iterations: 5
+      no_outer_iterations: 4
+      optimization_activate: true
+      
+      # 禁止后退
+      allow_init_with_backwards_motion: false
+      
+      # 禁用复杂功能
+      enable_homotopy_class_planning: false
+      
+      # TEB关键参数：确保机器人能移动
+      # 目标容忍度已在上面TEB配置中设置
+      
+      
+      # 已在上面设置min_speed_xy
+      
+      # 移除可能导致问题的自定义参数
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      always_send_full_costmap: true
+      global_frame: map
+      inflation_layer:
+        cost_scaling_factor: 10.0     # 增加膨胀梯度平缓度，让全局规划器选择远离墙面的路径
+        inflation_radius: 0.20       # 增加膨胀半径，提供更多安全距离
+        plugin: nav2_costmap_2d::InflationLayer
+      obstacle_layer:
+        enabled: true
+        observation_sources: scan
+        plugin: nav2_costmap_2d::ObstacleLayer
+        scan:
+          clearing: true                # 允许清除过时障碍物，防止数据累积
+          data_type: LaserScan
+          marking: true
+          max_obstacle_height: 2.0
+          obstacle_max_range: 2.5       # 恢复：原始设置
+          obstacle_min_range: 0.0
+          raytrace_max_range: 3.0       # 恢复：原始设置
+          raytrace_min_range: 0.0
+          topic: /scan
+      plugins:
+      - static_layer
+      - obstacle_layer
+      - inflation_layer
+      static_layer:
+        plugin: nav2_costmap_2d::StaticLayer
+        map_subscribe_transient_local: true
+        subscribe_to_updates: true
+      publish_frequency: 2.0        # 降低发布频率，防止CPU过载
+      resolution: 0.05             # 统一分辨率为0.05米
+      robot_base_frame: base_link
+      robot_radius: 0.08      # 减小机器人半径，适应狭窄通道
+      rolling_window: true      # SLAM模式下需要滚动窗口来跟随机器人
+      track_unknown_space: true
+      update_frequency: 2.0         # 降低更新频率，防止CPU过载
+      use_sim_time: true
+      width: 10
+      height: 10
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      always_send_full_costmap: true
+      global_frame: odom
+      height: 2                     # 减小局部costmap高度适应迷宫
+      inflation_layer:
+        cost_scaling_factor: 15.0     # 增加膨胀梯度平缓度，让机器人更愿意远离墙面
+        inflation_radius: 0.20       # 增加膨胀半径，提供更多安全距离
+        plugin: nav2_costmap_2d::InflationLayer
+      plugins:
+      - voxel_layer
+      - inflation_layer
+      publish_frequency: 2.0        # 提高局部costmap发布频率
+      resolution: 0.05             # 统一分辨率为0.05米
+      robot_base_frame: base_link
+      robot_radius: 0.08      # 减小机器人半径，适应狭窄通道
+      rolling_window: true
+      update_frequency: 2.0         # 降低局部costmap更新频率，减少清空
+      use_sim_time: true
+      voxel_layer:
+        enabled: true
+        mark_threshold: 0
+        max_obstacle_height: 2.0
+        observation_sources: scan
+        origin_z: 0.0
+        plugin: nav2_costmap_2d::VoxelLayer
+        publish_voxel_map: false
+        scan:
+          clearing: true                # 允许清除过时障碍物，防止数据累积
+          data_type: LaserScan
+          marking: true
+          max_obstacle_height: 2.0
+          obstacle_max_range: 2.5
+          obstacle_min_range: 0.0
+          raytrace_max_range: 3.0
+          raytrace_min_range: 0.0
+          topic: /scan
+        z_resolution: 0.05
+        z_voxels: 8
+      width: 2                      # 减小局部costmap宽度适应迷宫
+# map_server: # 探索模式使用SLAM动态地图，不需要静态地图服务器
+#   ros__parameters:
+#     use_sim_time: true
+#     yaml_filename: /home/lonewolf/Desktop/ros2_ws/install/robot_gazebo/share/robot_gazebo/maps/map_01.yaml
+planner_server:
+  ros__parameters:
+    GridBased:
+      plugin: nav2_navfn_planner/NavfnPlanner
+      tolerance: 2.0                # 增加容忍度，提高路径规划成功率
+      use_astar: true               # 参考配置：使用A*算法，更好处理复杂情况
+      use_quadratic: true           # 参考配置：启用二次插值，提高路径质量
+      use_dijkstra: false           # 参考配置：禁用Dijkstra，使用A*
+      allow_unknown: true           # 参考配置：SLAM专用：允许未知区域
+      cost_factor: 0.8              # 增加代价敏感度，让规划器更倾向于远离障碍物
+    expected_planner_frequency: 5.0 # 大幅提高规划频率，快速响应目标
+    planner_plugins:
+    - GridBased
+    use_sim_time: true
+velocity_smoother:
+  ros__parameters:
+    deadband_velocity:
+    - 0.01
+    - 0.01
+    - 0.01
+    feedback: OPEN_LOOP
+    max_accel:
+    - 1.5
+    - 1.5
+    - 3.0
+    max_decel:
+    - -1.5
+    - -1.5
+    - -3.0
+    max_velocity:
+    - 0.5
+    - 0.5
+    - 2.0
+    min_velocity:
+    - 0.0
+    - -0.5
+    - -2.0
+    odom_duration: 0.1
+    odom_topic: odom
+    scale_velocities: false
+    smoothing_frequency: 10.0
+    use_sim_time: true
+    velocity_timeout: 2.0
+waypoint_follower:
+  ros__parameters:
+    loop_rate: 20
+    stop_on_failure: false
+    use_sim_time: true
+    wait_at_waypoint:
+      enabled: true
+      plugin: nav2_waypoint_follower::WaitAtWaypoint
+      waypoint_pause_duration: 200
+    waypoint_task_executor_plugin: wait_at_waypoint
