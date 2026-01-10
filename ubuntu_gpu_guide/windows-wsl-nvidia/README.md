@@ -76,6 +76,11 @@ https://learn.microsoft.com/en-us/windows/wsl/install
 
 4. Launch Ubuntu and complete the initial user setup.
 
+5. I have also configure Windows 11 Graphics settings menu configuring Ubuntu to use the NVIDIA GeForce RTX 3050 Ti dedicated GPU for high performance.
+I have also configured Ubuntu 22.04.5 LTS to use the high-performance NVIDIA GeForce RTX 3050 Ti laptop GPU within the Windows 11 Graphics settings menu under System > Display > Graphic....see the screen below for detail.
+
+![High-performance NVIDIA access](image3.1.png)
+
 ---
 
 ## Step 4. Configure NVIDIA GPU Support inside WSL
@@ -203,4 +208,3 @@ VS Code provides seamless WSL integration for Linux development workflows, inclu
 - CUDA workloads are supported separately via `nvidia-smi` passthrough
 
 ---
-
