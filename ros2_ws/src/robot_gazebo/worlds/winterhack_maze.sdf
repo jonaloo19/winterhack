@@ -446,14 +446,25 @@
           <surface>
             <contact>
               <collide_bitmask>0xff</collide_bitmask>
+              <ode>
+                <kp>200000.0</kp>
+                <kd>1000.0</kd>
+                <max_vel>0.05</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
             </contact>
             <friction>
               <ode>
-                <mu>1.0</mu>
-                <mu2>1.0</mu2>
+                <mu>20.0</mu>
+                <mu2>20.0</mu2>
                 <slip1>0.0</slip1>
                 <slip2>0.0</slip2>
               </ode>
+              <torsional>
+                <coefficient>10.0</coefficient>
+                <use_patch_radius>true</use_patch_radius>
+                <patch_radius>0.005</patch_radius>
+              </torsional>
             </friction>
           </surface>
         </collision>
@@ -493,14 +504,25 @@
           <surface>
             <contact>
               <collide_bitmask>0xff</collide_bitmask>
+              <ode>
+                <kp>200000.0</kp>
+                <kd>1000.0</kd>
+                <max_vel>0.05</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
             </contact>
             <friction>
               <ode>
-                <mu>1.0</mu>
-                <mu2>1.0</mu2>
+                <mu>20.0</mu>
+                <mu2>20.0</mu2>
                 <slip1>0.0</slip1>
                 <slip2>0.0</slip2>
               </ode>
+              <torsional>
+                <coefficient>10.0</coefficient>
+                <use_patch_radius>true</use_patch_radius>
+                <patch_radius>0.005</patch_radius>
+              </torsional>
             </friction>
           </surface>
         </collision>
