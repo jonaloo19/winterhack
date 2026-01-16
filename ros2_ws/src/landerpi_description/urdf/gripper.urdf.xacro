@@ -161,6 +161,31 @@
       </geometry>
     </collision>
   </link>
+  <gazebo reference="left_jaw_link">
+    <surface>
+      <contact>
+        <ode>
+          <kp>200000.0</kp>
+          <kd>1000.0</kd>
+          <max_vel>0.05</max_vel>
+          <min_depth>0.001</min_depth>
+        </ode>
+      </contact>
+      <friction>
+        <ode>
+          <mu>20.0</mu>
+          <mu2>20.0</mu2>
+          <slip1>0.0</slip1>
+          <slip2>0.0</slip2>
+        </ode>
+        <torsional>
+          <coefficient>10.0</coefficient>
+          <use_patch_radius>true</use_patch_radius>
+          <patch_radius>0.005</patch_radius>
+        </torsional>
+      </friction>
+    </surface>
+  </gazebo>
 
   <joint name="left_jaw_joint" type="prismatic">
     <origin xyz="0.003943 0.036774 -0.003" rpy="0 0 0" />
@@ -195,6 +220,31 @@
       </geometry>
     </collision>
   </link>
+  <gazebo reference="right_jaw_link">
+    <surface>
+      <contact>
+        <ode>
+          <kp>200000.0</kp>
+          <kd>1000.0</kd>
+          <max_vel>0.05</max_vel>
+          <min_depth>0.001</min_depth>
+        </ode>
+      </contact>
+      <friction>
+        <ode>
+          <mu>20.0</mu>
+          <mu2>20.0</mu2>
+          <slip1>0.0</slip1>
+          <slip2>0.0</slip2>
+        </ode>
+        <torsional>
+          <coefficient>10.0</coefficient>
+          <use_patch_radius>true</use_patch_radius>
+          <patch_radius>0.005</patch_radius>
+        </torsional>
+      </friction>
+    </surface>
+  </gazebo>
 
   <joint name="right_jaw_joint" type="prismatic">
     <origin xyz="0.003943 -0.038229 -0.003" rpy="0 0 0" />
